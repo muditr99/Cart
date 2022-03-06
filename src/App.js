@@ -12,19 +12,19 @@ class App extends React.Component {
                 price: 99,
                 title: 'Watch',
                 qty: 1,
-                img: '',
+                img: 'https://images.unsplash.com/photo-1533139502658-0198f920d8e8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8d2F0Y2h8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
                 id: 1,
             },{
                 price: 999,
                 title: 'Mobile Phone',
                 qty: 10,
-                img: '',
+                img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGhvbmV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
                 id: 2,
             },{
                 price: 999,
                 title: 'Laptop',
                 qty: 4,
-                img: '',
+                img: 'https://images.unsplash.com/photo-1602080858428-57174f9431cf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGxhcHRvcHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
                 id: 3,
             },
         ]
@@ -91,6 +91,20 @@ getCartCount = () => {
 
 }
 
+getCartTotal = () => {
+
+    const { products } = this.state;
+  
+    let cartTotal = 0;
+  
+    products.forEach((product) => {
+        cartTotal += product.price * product.qty;
+    })
+  
+    return cartTotal;
+  
+  }
+
    render () {
       const { products } = this.state;
       return (
@@ -102,6 +116,7 @@ getCartCount = () => {
         onDecreaseQuantity = {this.handleDecreaseQuantity}
         onDeleteProduct = {this.handleDeleteProduct}
         />
+        <div style = { { fontSize : 20, padding : 10 } }>TOTAL: {this.getCartTotal()} </div>
       </div>
       );
     }
