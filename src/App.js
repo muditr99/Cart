@@ -3,7 +3,7 @@ import Cart from "./Cart";
 import Navbar from "./Navbar";
 
 import { db } from './firebase';
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, addDoc, updateDoc, doc } from "firebase/firestore";
  
 class App extends React.Component {
 
@@ -88,10 +88,15 @@ handleIncreaseQuantity = (product) => {
     const { products } = this.state;
     const index = products.indexOf(product);
 
-    products[index].qty += 1;
+    // products[index].qty += 1;
 
-    this.setState({
-        products: products,
+    // this.setState({
+    //     products: products,
+    // })
+
+    const docRef = doc(db, 'products', products[index].id);
+    updateDoc(docRef, {
+      qty : products[index].qty + 1,
     })
 
 }
@@ -154,11 +159,25 @@ getCartTotal = () => {
   
   }
 
+  addProduct = () => {
+    const ref = collection(db, 'products');
+    addDoc(ref, {
+      img : '',
+      qty : 3,
+      price : 900,
+      title : 'washing machine' 
+    })
+    .then((docRef) => {
+      console.log(docRef);
+    })
+  }
+
    render () {
       const { products, loading } = this.state;
       return (
       <div className="App">
         <Navbar count = {this.getCartCount()} />
+        <button onClick={this.addProduct} style={ { padding:20, fontSize:20} }>Add a product</button>
         <Cart
         products = {products}
         onIncreaseQuantity = {this.handleIncreaseQuantity}
