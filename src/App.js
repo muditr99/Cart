@@ -3,7 +3,7 @@ import Cart from "./Cart";
 import Navbar from "./Navbar";
 
 import { db } from './firebase';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
  
 class App extends React.Component {
 
@@ -39,9 +39,30 @@ class App extends React.Component {
 }
 
 componentDidMount () {
+  // const ref = collection(db, 'products');
+  // getDocs(ref)
+  // .then((snapshot) => {
+  //   console.log(snapshot);
+
+  //   snapshot.docs.map((doc) => {
+  //     console.log(doc.data());
+  //   })
+
+  //   const products = snapshot.docs.map((doc) => {
+  //     const data = doc.data();
+  //     data['id'] = doc.id;
+  //     return data;
+  //   })
+
+  //   this.setState({
+  //     products : products,
+  //     loading : false
+  //   })
+  // })
+
+  // added listener(onSnapshot) to db products collection
   const ref = collection(db, 'products');
-  getDocs(ref)
-  .then((snapshot) => {
+  onSnapshot(ref, (snapshot) => {
     console.log(snapshot);
 
     snapshot.docs.map((doc) => {
