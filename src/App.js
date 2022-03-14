@@ -3,7 +3,7 @@ import Cart from "./Cart";
 import Navbar from "./Navbar";
 
 import { db } from './firebase';
-import { collection, getDocs, onSnapshot, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, addDoc, updateDoc, doc, deleteDoc, query, where, orderBy } from "firebase/firestore";
  
 class App extends React.Component {
 
@@ -62,7 +62,10 @@ componentDidMount () {
 
   // added listener(onSnapshot) to db products collection
   const ref = collection(db, 'products');
-  onSnapshot(ref, (snapshot) => {
+  // query
+  const q = query(ref, orderBy('price', 'asc'));
+  // onSnapshot(q, (snapshot) => {
+  onSnapshot(q, (snapshot) => {
     console.log(snapshot);
 
     snapshot.docs.map((doc) => {
@@ -192,10 +195,10 @@ getCartTotal = () => {
     const ref = collection(db, 'products');
 
     addDoc(ref, {
-      img : '',
-      qty : 3,
-      price : 900,
-      title : 'washing machine' 
+      img : 'https://images.unsplash.com/photo-1511886929837-354d827aae26?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGZvb3RiYWxsfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+      qty : 5,
+      price : 999,
+      title : 'Football' 
     })
     .then((docRef) => {
       console.log(docRef);
@@ -207,7 +210,7 @@ getCartTotal = () => {
       return (
       <div className="App">
         <Navbar count = {this.getCartCount()} />
-        <button onClick={this.addProduct} style={ { padding:20, fontSize:20} }>Add a product</button>
+        <button onClick={this.addProduct} style={ { padding:14, fontSize:15} }>Add a product</button>
         <Cart
         products = {products}
         onIncreaseQuantity = {this.handleIncreaseQuantity}
