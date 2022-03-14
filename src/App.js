@@ -3,7 +3,7 @@ import Cart from "./Cart";
 import Navbar from "./Navbar";
 
 import { db } from './firebase';
-import { collection, getDocs, onSnapshot, addDoc, updateDoc, doc } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
  
 class App extends React.Component {
 
@@ -95,8 +95,15 @@ handleIncreaseQuantity = (product) => {
     // })
 
     const docRef = doc(db, 'products', products[index].id);
+
     updateDoc(docRef, {
       qty : products[index].qty + 1,
+    })
+    .then(() => {
+      console.log('Updated Successfully');
+    })
+    .catch((error) => {
+      console.log('error in updating product', error);
     })
 
 }
@@ -111,10 +118,22 @@ handleDecreaseQuantity = (product) => {
         return;
     }
 
-    products[index].qty -= 1;
+    // products[index].qty -= 1;
 
-    this.setState({
-        products: products,
+    // this.setState({
+    //     products: products,
+    // })
+
+    const docRef = doc(db, 'products', products[index].id);
+
+    updateDoc(docRef, {
+      qty : products[index].qty - 1,
+    })
+    .then(() => {
+      console.log('Updated Successfully');
+    })
+    .catch((error) => {
+      console.log('error in updating product', error);
     })
 
 }
@@ -123,10 +142,20 @@ handleDeleteProduct = (id) => {
 
     const { products } = this.state;
 
-    const items = products.filter((item) => item.id != id); // [{}, {}, {}]
+    // const items = products.filter((item) => item.id != id); // [{}, {}, {}]
 
-    this.setState({
-        products: items,
+    // this.setState({
+    //     products: items,
+    // })
+
+    const docRef = doc(db, 'products', id);
+
+    deleteDoc(docRef)
+    .then(() => {
+      console.log('Removed Successfully');
+    })
+    .catch((error) => {
+      console.log('error in removing product', error);
     })
 
 }
@@ -161,6 +190,7 @@ getCartTotal = () => {
 
   addProduct = () => {
     const ref = collection(db, 'products');
+
     addDoc(ref, {
       img : '',
       qty : 3,
